@@ -1,10 +1,10 @@
 Package: xcms
-Version: 1.6.0
-Date: 2006-08-24
+Version: 1.6.1
+Date: 2006-12-05
 Title: LC/MS and GC/MS Data Analysis
 Author: Colin A. Smith <csmith@scripps.edu>
 Maintainer: Colin A. Smith <csmith@scripps.edu>
-Depends: R (>= 1.9.0)
+Depends: R (>= 1.9.0), methods
 Suggests: faahKO, multtest
 SystemRequirements: NetCDF
 Description: Framework for processing and visualization of
