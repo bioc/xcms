@@ -1,3 +1,11 @@
+2007-10-09: 1.10.1
+Added error when xcmsRaw objects are read that have non-monotonic stantimes
+Added warning when retcor() is probably overcorrecting
+Fixed a bounds checking bug in specPeaks()
+
+2007-10-08: 1.10.0
+Bioconductor release 2.1
+
 2007-09-17: 1.9.6
 rawEIC uses binary search
 findMZBoxes gives proper error messages
