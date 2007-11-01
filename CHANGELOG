@@ -1,3 +1,7 @@
+2007-11-01: 1.10.2
+Fixed bug in findPeaks.centWave() buffer initialisation (mzboxes.c)
+Added check in findPeaks.matchedFilter() for not picking filter artefacts 
+
 2007-10-09: 1.10.1
 Added error when xcmsRaw objects are read that have non-monotonic stantimes
 Added warning when retcor() is probably overcorrecting

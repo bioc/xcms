@@ -449,7 +449,7 @@ setMethod("findPeaks.matchedFilter", "xcmsRaw", function(object, fwhm = 30, sigm
              noise <- mean(ysums[ysums > 0])
              #noise <- mean(yfilt[yfilt >= 0])
              sn <- yfilt[maxy]/noise
-             if (yfilt[maxy] > 0 && yfilt[maxy] > snthresh*noise) {
+             if (yfilt[maxy] > 0 && yfilt[maxy] > snthresh*noise && ysums[maxy] > 0) {
                  peakrange <- descendZero(yfilt, maxy)
                  intmat <- ymat[,peakrange[1]:peakrange[2],drop=FALSE]
                  mzmat <- matrix(object@env$mz[bufMax[bufidx[i:(i+steps-1)],
@@ -510,7 +510,7 @@ setGeneric("findPeaks.centWave", function(object, ...) standardGeneric("findPeak
 
 setMethod("findPeaks.centWave", "xcmsRaw", function(object, scanrange=c(1,length(object@scantime)),
                                         minEntries=4, dev=140e-6, snthresh=20, minPeakWidth=7, noiserange=c(minPeakWidth*3,minPeakWidth*6),
-                                        scales=c(5,7,9,12,16,20), maxGaussOverlap = 0.5,                     minPtsAboveBaseLine=4, scRangeTol=2,                                 maxDescOutlier=floor(minPeakWidth/2), mzdiff=-0.02, 
+                                        scales=c(5,7,9,12,16,20), maxGaussOverlap = 0.5,                     minPtsAboveBaseLine=4, scRangeTol=2,                                 maxDescOutlier=floor(minPeakWidth/2), mzdiff=-0.001, 
                                         rtdiff=-round(2/3 *minPeakWidth *mean(diff(object@scantime))),
                                         integrate=1, sleep=0, fitgauss = FALSE, verbose.columns = FALSE) 
 {
