@@ -1,3 +1,7 @@
+2007-11-07: 1.10.3
+Fixed a serious fillPeaks() bug introduced in version 1.9.5, which caused it to
+silently fill in zero intensities for almost every missing peak
+
 2007-11-01: 1.10.2
 Fixed bug in findPeaks.centWave() buffer initialisation (mzboxes.c)
 Added check in findPeaks.matchedFilter() for not picking filter artefacts 

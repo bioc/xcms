@@ -823,7 +823,7 @@ setMethod("getPeaks", "xcmsRaw", function(object, peakrange, step = 0.1) {
     stime <- object@scantime
     
     ### Create EIC buffer
-    mrange <- range(peakrange[1:2])
+    mrange <- range(peakrange[,1:2])
     mass <- seq(floor(mrange[1]/step)*step, ceiling(mrange[2]/step)*step, by = step)
     bufsize <- min(100, length(mass))
     buf <- profFun(object@env$mz, object@env$intensity, object@scanindex, 
