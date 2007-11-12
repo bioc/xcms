@@ -1,3 +1,6 @@
+2007-11-12: 1.10.5
+Increased buffer size in findMZBoxes()
+
 2007-11-07: 1.10.4
 Standardised peak area calculation by introducing scan-distance multiplier to findPeaks.centWave()
 
