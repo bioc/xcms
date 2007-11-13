@@ -510,7 +510,7 @@ setGeneric("findPeaks.centWave", function(object, ...) standardGeneric("findPeak
 
 setMethod("findPeaks.centWave", "xcmsRaw", function(object, scanrange=c(1,length(object@scantime)),
                                         minEntries=4, dev=140e-6, snthresh=20, minPeakWidth=7, noiserange=c(minPeakWidth*3,minPeakWidth*6),
-                                        scales=c(5,7,9,12,16,20), maxGaussOverlap = 0.5,                     minPtsAboveBaseLine=4, scRangeTol=2,                                 maxDescOutlier=floor(minPeakWidth/2), mzdiff=-0.001, 
+                                        scales=c(5,7,9,12,16,20), maxGaussOverlap = 0.5, minPtsAboveBaseLine=4, scRangeTol=2,        maxDescOutlier=floor(minPeakWidth/2), mzdiff=-0.001, 
                                         rtdiff=-round(2/3 *minPeakWidth *mean(diff(object@scantime))),
                                         integrate=1, sleep=0, fitgauss = FALSE, verbose.columns = FALSE) 
 {
@@ -648,11 +648,11 @@ setMethod("findPeaks.centWave", "xcmsRaw", function(object, scanrange=c(1,length
     
             ##  postprocessing   
             if (!is.null(peaks)) {
-                if (is.vector(peaks)) peaks <- data.frame(t(peaks))  else peaks <- data.frame(peaks)
+               # if (is.vector(peaks)) peaks <- data.frame(t(peaks))  else peaks <- data.frame(peaks)
                 basenames <- c("mz","mzmin","mzmax","rt","rtmin","rtmax","into","intb","maxo","sn")
                 colnames(peaks) <- c(basenames,"egauss","mu","sigma","h","f", "dppm", "scale","scpos","scmin","scmax","lmin","lmax")
                    
-                if (is.vector(peakinfo)) peakinfo <- data.frame(t(peakinfo))  else peakinfo <- data.frame(peakinfo)
+               # if (is.vector(peakinfo)) peakinfo <- data.frame(t(peakinfo))  else peakinfo <- data.frame(peakinfo)
                 colnames(peakinfo) <- c("scale","scaleNr","scpos","scmin","scmax")   
                    
                 for (p in 1:dim(peaks)[1]) {
@@ -750,7 +750,7 @@ setMethod("findPeaks.centWave", "xcmsRaw", function(object, scanrange=c(1,length
     pr <- p[uindex,,drop=FALSE]
     cat(dim(p)[1],' Peaks  -- rectUnique(',mzdiff,',',rtdiff,') -->  ', dim(pr)[1],' Peaks.\n',sep='')
 
-    invisible(as.matrix(pr))
+    invisible(pr) # as.matrix(pr)
 })
 
 setGeneric("findPeaks.MSW", function(object, ...) standardGeneric("findPeaks.MSW"))

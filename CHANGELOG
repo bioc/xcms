@@ -1,5 +1,9 @@
+2007-11-13: 1.10.6
+Removed unnecessary use of data.frame in findPeaks.centWave(), this fixes
+a long delay when large peaklists are generated
+
 2007-11-12: 1.10.5
-Increased buffer size in findMZBoxes()
+Increased buffer size in findMZBoxes() to catch a rare bug
 
 2007-11-07: 1.10.4
 Standardised peak area calculation by introducing scan-distance multiplier to findPeaks.centWave()
