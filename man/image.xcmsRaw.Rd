@@ -1,13 +1,20 @@
-\name{image.xcmsRaw}
+\name{image-methods}
+\docType{methods}
 \alias{image.xcmsRaw}
+\alias{image, image-methods}
 \title{Plot log intensity image of a xcmsRaw object}
 \description{
   Create log intensity false-color image of a xcmsRaw object plotted
   with m/z and retention time axes
 }
-\usage{
-image.xcmsRaw(x, col = rainbow(256), ...)
+\section{Methods}{
+\describe{
+\item{x = "xcmsRaw"}{
+  \code{
+    image(x, col = rainbow(256), ...)
+  }
 }
+}}
 \arguments{
   \item{x}{xcmsRaw object}
   \item{col}{vector of colors to use for for the image}

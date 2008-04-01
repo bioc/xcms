@@ -4,7 +4,8 @@
 \alias{findMZBoxes,xcmsRaw-method}
 \title{Find areas of high peak density in  LC/MS Data}
 \description{
- 
+  Find regions of interest (ROI) in centroided LC/MS data
+  for further consideration by peak-pickers.
 }
 \section{Methods}{
 \describe{
@@ -24,7 +25,9 @@
 }
 \details{
   Areas of high peak density (characterised by having at least \code{minEntries} peaks
-  within \code{dev} ppm in consecutive scans) in the LC/MS map are located.
+  within \code{dev} ppm in consecutive scans) in the LC/MS map are
+  located. The regions need not be "real" peaks, this is only a
+  filtering step applied before peak picking.  
 }
 \value{
   A list with entries :
