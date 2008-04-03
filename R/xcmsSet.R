@@ -14,7 +14,7 @@ xcmsSet <- function(files = NULL, snames = NULL, sclass = NULL,
     object <- new("xcmsSet")
 
     filepattern <- c("[Cc][Dd][Ff]", "[Nn][Cc]", "([Mm][Zz])?[Xx][Mm][Ll]",
-                     "[Mm][Zz][Da][Aa][Tt][Aa]")
+                     "[Mm][Zz][Dd][Aa][Tt][Aa]")
     filepattern <- paste(paste("\\.", filepattern, "$", sep = ""), collapse = "|")
     if (is.null(files))
         files <- list.files(pattern = filepattern, recursive = TRUE)
