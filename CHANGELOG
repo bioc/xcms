@@ -1,6 +1,7 @@
-2008-04-02: 1.10.?
+2008-04-02: 1.10.8
 Fix duplicate setGeneric() which fails on R-2.7a
 Fix BinLinBase which had an uninitialised argument in .Call()
+Provide clean base for pulling 1.10.8 into 1.11.19
 
 2008-01-24: 1.10.7
 Fix in plot(eic) for xcmsEIC with absent groups
