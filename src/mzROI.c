@@ -18,7 +18,7 @@
 #define SIZE_PEAKBUFS 350000   // max. # of "short" boxes
 #define SIZE_PEAKBUFL 5000    // max. # of "long" boxes
 #define DIM_PEAKBUFS 50       // max length of "short" boxes
-#define DIM_PEAKBUFL 3500     // max length of "long" boxes = max number of spectra
+#define DIM_PEAKBUFL 4000     // max length of "long" boxes = max number of spectra
 #define DIM_MZBUF    25000     // max # m/z values to hold
 #define DIM_SCANBUF 15000      // max # m/z values per scan
 
@@ -570,7 +570,7 @@ SEXP findmzROI(SEXP mz, SEXP intensity, SEXP scanindex, SEXP massrange, SEXP sca
     if (scanbuf.length > 0) 
     {
       if (idebug == TRUE) 
-          printf("Scan Nr. %d of %d (%d %%) %d peaks -- working at %d m/z boxes, %d boxes found.\n", ctScan, scanrangeTo,  (int)100.0*ctScan/scanrangeTo,scanbuf.length,mzval.length,peakbuf.PeaksInBuf);
+          printf("Scan Nr. %d of %d (%d %%) %d peaks -- working at %d m/z ROI's, %d ROI's completed.\n", ctScan, scanrangeTo,  (int)100.0*ctScan/scanrangeTo,scanbuf.length,mzval.length,peakbuf.PeaksInBuf);
       insertscan(&scanbuf,ctScan,&peakbuf,&mzval,pickOptions);
       cleanup(ctScan,&peakbuf,&mzval,&scerr,pickOptions,minimumIntValues,minimumInt,idebug);
     }
