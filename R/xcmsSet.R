@@ -1089,10 +1089,11 @@ setMethod("diffreport", "xcmsSet", function(object, class1 = levels(sampclass(ob
 	pvalue <- pval(testval, testclab, tstat)
 	stat <- data.frame(fold = fold, tstat = tstat, pvalue = pvalue)
 	if(length(levels(sampclass(object))) >2){
+            pvalAnova<-c()
 	    for(i in 1:nrow(values)){
 		var<-as.numeric(values[i,])
 		ano<-summary(aov(var ~ sampclass(object)) )
-		pvalAnova<-unlist(ano)["Pr(>F)1"]
+                pvalAnova<-append(pvalAnova, unlist(ano)["Pr(>F)1"])
 	    }
 	    stat<-cbind(stat, anova= pvalAnova)
 	}
@@ -1126,10 +1127,13 @@ setMethod("diffreport", "xcmsSet", function(object, class1 = levels(sampclass(ob
             dir.create(eicdir)
             dir.create(boxdir)
             if (capabilities("png")){
-                xcmsBoxPlot(values, sampclass(object), dirpath=boxdir, pic="png",  width=w, height=h)
+                xcmsBoxPlot(values[seq(length = eicmax),],
+                            sampclass(object), dirpath=boxdir, pic="png",  width=w, height=h)
+
                 png(file.path(eicdir, "%003d.png"), width = w, height = h)
             }else{
-                xcmsBoxPlot(values, sampclass(object), dirpath=boxdir, pic="pdf", width=w, height=h)
+                xcmsBoxPlot(values[seq(length = eicmax),],
+                            sampclass(object), dirpath=boxdir, pic="pdf", width=w, height=h)
                 pdf(file.path(eicdir, "%003d.pdf"), width = w/72,
                     height = h/72, onefile = FALSE)
 	    }
@@ -1144,10 +1148,6 @@ setMethod("diffreport", "xcmsSet", function(object, class1 = levels(sampclass(ob
 
 xcmsBoxPlot<-function(values, className, dirpath, pic, width=640, height=480)
 {
-    if(any(colnames(values) == "metlin")){
-        ind<-which(colnames(values) != "metlin")
-    }
-
     if (pic == "png"){
 	png(file.path(dirpath, "%003d.png"), width, height)
     } else{
@@ -1158,11 +1158,15 @@ xcmsBoxPlot<-function(values, className, dirpath, pic, width=640, height=480)
 	#pdf(file.path(dir, "%003d.pdf"), width = w/72, height = h/72, onefile = FALSE)
 	pdf(file.path(dirpath, "%003d.pdf"), width = width/72, height = height/72, onefile = FALSE)
     }
+
+    ind<-which(colnames(values) != "metlin")
     for (i in 1:nrow(values)){
 	boxplot(as.numeric(values[i,ind]) ~ className, col="blue",
                 outline=FALSE, main=paste("Feature ", row.names(values)[i] ))
     }
-    dev.off()
+    if (length(values) > 0) {
+        dev.off()
+    }
 }
 
 retexp <- function(peakrange, width = 200) {

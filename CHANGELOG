@@ -1,3 +1,7 @@
+2008-12-17: 1.14.1
+Fix the Calculation of Anova values for >2 sample classes
+Fix xcmsBoxPlot() behaviour, now obeying max_eics
+
 2008-10-02: 1.13.10
 findPeaks.centWave: added check & warning for invalid scanrange parameter
 sampnames<-(): fix for empty xcmsSet@phenoData
