@@ -1,3 +1,9 @@
+2009-11-13: 1.20.1: 
+Fixed a dimension problem in collect() for MS2
+
+2009-10-11: 1.20.0:
+Release of BioC 2.5
+
 2009-10-11: 1.18.4
 group.nearest: fixed/added calculation of peaks-per-sampclass, 
                resolving problem in retcor() reported by Daniel Maturana
