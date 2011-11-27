@@ -1,3 +1,7 @@
+2011-11-27 1.30.3
+Fixed linker flags for old libncdf
+Version bump for release
+
 2011-10-04 1.28.1
 Added warnings and recovery for silent errors from stitch.netcdf that happen when there are few lock mass scans.
 
