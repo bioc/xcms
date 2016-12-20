@@ -135,6 +135,8 @@ plotQC <- function(object,
               col = sampColors, xlab = "", ylab = "Retention Time Deviation",
               names.arg = sampNames, las = 2)
   }
+
+  invisible(deviations)
 }
 
 

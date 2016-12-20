@@ -1,3 +1,17 @@
+CHANGES IN VERSION 1.50.1
+-------------------------
+
+BUG FIXES:
++ Backport fix for wrong sample indexing in getEIC (closes #92)
+
+NEW FEATURE:
++ silently return the data used in plotQC()
+
+CHANGES IN VERSION 1.50.0
+-------------------------
+
++ Release of BioC-3.4
+
 CHANGES IN VERSION 1.49.7
 -------------------------
 
