@@ -1,3 +1,5 @@
+#' @include XcmsExperiment.R
+
 #' @title Store contents of `MsExperiment` and `XcmsExperiment` objects as
 #' plain text files
 #'
