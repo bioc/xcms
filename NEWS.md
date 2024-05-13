@@ -1,3 +1,11 @@
+# xcms 4.2
+
+## Changes in version 4.2.1
+
+- Fix in `dropFeatureDefinitions()` that was not correctly removing additional
+  metadata from gap-filled chromatographic peaks.
+
+
 # xcms 4.1
 
 ## Changes in version 4.1.13

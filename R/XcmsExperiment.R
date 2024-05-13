@@ -1553,9 +1553,8 @@ setMethod(
             object@processHistory, type = .PROCSTEP.PEAK.GROUPING, num = 1L)
         object@featureDefinitions <- .empty_feature_definitions()
         if (.hasFilledPeaks(object)) {
-            object@chromPeaks <- object@chromPeaks[
-                                            !object@chromPeakData$is_filled, ,
-                                            drop = FALSE]
+            object <- .filter_chrom_peaks(
+                object, which(!.chromPeakData(object)$is_filled))
             object@processHistory <- dropProcessHistoriesList(
                 object@processHistory, type = .PROCSTEP.PEAK.FILLING)
         }
