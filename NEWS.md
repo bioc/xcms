@@ -1,5 +1,11 @@
 # xcms 4.2
 
+## Changes in version 4.2.2
+
+- Fix for issue #734: `plot,MsExperiment` is now working with `MsExperiment`
+  that have also MS2 Data.
+
+
 ## Changes in version 4.2.1
 
 - Fix in `dropFeatureDefinitions()` that was not correctly removing additional
