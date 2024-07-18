@@ -175,7 +175,7 @@ setMethod("storeResults",
     base[base == "replace_id"]  <- study_id
     msrun <- cbind(
         name = paste0("ms_run[", seq_sample, "]-location"),
-        value = unlist(fileNames(object)),
+        value = paste0("file:///", unlist(gsub(" ", "",fileNames(object)))),
         order = .prefix_zero(seq_sample)
     )
     if (polarity == "positive") {
@@ -193,8 +193,8 @@ setMethod("storeResults",
     msrun <- msrun[order(msrun[, "order"]), c("name", "value")]
 
     assay <- cbind(
-        name = paste("assay", seq_sample),
-        value = paste0("assay[", seq_sample, "]"),
+        name = paste0("assay[", seq_sample, "]"),
+        value = paste(seq_sample, "assay"),
         order = .prefix_zero(seq_sample)
     )
     assay_ref <- cbind(
@@ -214,7 +214,9 @@ setMethod("storeResults",
         var,
         base[5:nrow(base), ]
     )
-    cbind(id = "MTD", mtd)
+    mtd <- cbind(id = "MTD", mtd)
+
+    gsub("\\\\", "/", mtd)
 }
 
 #' @description
@@ -241,7 +243,7 @@ setMethod("storeResults",
 #' Create the small molecule feature (SMF) `matrix` One row is one feature
 #' defined in xcms. Use the .SMF static object.
 #' object as a basis.
-#'
+#'read
 #' @noRd
 #'
 #' @param object `XcmsExperiment`.
@@ -343,8 +345,10 @@ setMethod("storeResults",
             res,
             matrix(ncol = 2,
             c(paste0("study_variable[", i, "]"),
+              paste0("study_variable[", i, "]-description"),
               paste0("study_variable[", i, "]-assay_refs"),
               paste0(unique_svar[i]),
+              paste0("Sample in column ", unique_svar[i]), #either this or <to be filled>
               paste0("assay[", idx[, "row"], "]", collapse = sep)
               )))
     }
@@ -363,6 +367,7 @@ setMethod("storeResults",
 }
 
 ### Static objects
+
 .MTD <- cbind(
     name = c("mzTab-version",
              "mzTab-ID",
@@ -372,28 +377,32 @@ setMethod("storeResults",
              "cv[1]-full_name",
              "cv[1]-version",
              "cv[1]-uri",
+             "cv[2]-label",
+             "cv[2]-full_name",
+             "cv[2]-version",
+             "cv[2]-uri",
              "database[1]",
              "database[1]-prefix",
              "database[1]-version",
              "database[1]-uri",
-             "small_molecule-quantification_unit",
-             "small_molecule_feature-quantification_unit",
-             "id_confidence_measure[1]"),
+             "small_molecule_feature-quantification_unit"),
     value = c("2.0.0-M",
               "replace_id",
-              "[MS, MS:4711, xcms, 3.1.1]",
-              "[MS, MS:1001834, LC-MS label-free quantitation analysis]",
+              "[MS, MS:1001582, XCMS, 3.1.1]",
+              "[MS, MS:1001834, LC-MS label-free quantitation analysis, ]",
               "MS",
               "PSI-MS controlled vocabulary",
               "4.1.138",
               "https://raw.githubusercontent.com/HUPO-PSI/psi-ms-CV/master/psi-ms.obo",
+              "PRIDE",
+              "PRIDE PRoteomics IDEntifications (PRIDE) database controlled vocabulary",
+              "16:10:2023 11:38",
+              "https://www.ebi.ac.uk/ols/ontologies/pride",
               "[,, \"no database\", null ]",
               "null",
               "Unknown",
               "null",
-              "null",
-              "[MS, MS:1001841, LC-MS feature volume, ]",
-              "null"))
+              "[PRIDE, PRIDE:0000330, Arbitrary quantification unit, ]"))
 
 .SML <- c("SMH", "SML_ID","SMF_ID_REFS", "database_identifier",
           "chemical_formula", "smiles", "inchi", "chemical_name",
@@ -404,3 +413,4 @@ setMethod("storeResults",
           "adduct_ion", "isotopomer", "exp_mass_to_charge", "charge",
           "retention_time_in_seconds", "retention_time_in_seconds_start",
           "retention_time_in_seconds_end")
+
