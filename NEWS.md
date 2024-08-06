@@ -1,5 +1,12 @@
 # xcms 4.2
 
+## Changes in version 4.2.3
+
+- Fix for issue #755: `chromatogram()` with `msLevel = 2L` did return empty
+  data if parameter `isolationWindowTargetMz` was not specified (or respective
+  spectra variable was `NA`). By default, now, all MS2 spectra are integrated
+  if `isolationWindowTargetMz` is not specified.
+
 ## Changes in version 4.2.2
 
 - Fix for issue #734: `plot,MsExperiment` is now working with `MsExperiment`
