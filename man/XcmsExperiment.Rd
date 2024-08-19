@@ -511,14 +511,16 @@ If the \code{XcmsExperiment} contains correspondence results, also the
 associated feature definitions will be included in the returned
 \code{XChromatograms}. By default the function returns chromatograms from MS1
 data, but by setting parameter \code{msLevel = 2L} it is possible to e.g.
-extract also MS2 chromatograms. For \code{msLevel} other than 1 it is in
-addition important to also specify the \code{isolationWindowTargetMz} for which
-MS2 data should be extracted (e.g. for SWATH data MS2 spectra are created
-for different m/z isolation windows and the \code{isolationWindowTargetMz}
-parameter allows to define from which of these the MS2 chromatogram
-should be extracted.
-Note that in future more efficient data structures for chromatographic
-data will be available as well.
+extract also MS2 chromatograms. By default, with parameter
+\code{isolationWindowTargetMz = NULL} or \code{isolationWindowTargetMz = NA_real_},
+data from \strong{all} MS2 spectra will be considered in the chromatogram
+extraction. If MS2 data was generated within different m/z isolation
+windows (such as e.g. with Scies SWATH data), the parameter
+\code{isolationWindowTargetMz} should be used to ensure signal is only extracted
+from the respective isolation window. The \code{isolationWindowTargetMz()}
+function on the \code{Spectra} object can be used to inspect/list available
+isolation windows of a data set. See also the xcms \emph{LC-MS/MS vignette} for
+examples and details.
 \item \code{chromPeaks}: returns a \code{numeric} matrix with the identified
 chromatographic peaks. Each row represents a chromatographic peak
 identified in one sample (file). The number of columns depends on the

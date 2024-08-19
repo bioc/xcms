@@ -1171,11 +1171,25 @@ test_that("chromatogram,XcmsExperiment and .xmse_extract_chromatograms_old", {
     ## real MS2 data.
     res <- chromatogram(mse_dia, msLevel = 2L, mz = c(50, 300),
                         rt = c(100, 600))
-    expect_true(length(intensity(res[[1L]])) == 0)
-    res <- chromatogram(mse_dia, msLevel = 2L, mz = c(50, 300),
-                        rt = c(100, 600), isolationWindowTargetMz = 270.85,
-                        aggregationFun = "sum")
     expect_true(all(intensity(res[[1L]]) > 0))
+    res2 <- chromatogram(mse_dia, msLevel = 2L, mz = c(50, 300),
+                         rt = c(100, 600), isolationWindowTargetMz = 270.85,
+                         aggregationFun = "sum")
+    expect_true(all(intensity(res2[[1L]]) > 0))
+    ## have more data points without isolation windows
+    expect_true(length(intensity(res[[1L]])) > length(intensity(res2[[1L]])))
+
+    ## fake MS2 data with undefined isolation window.
+    a <- chromatogram(xmseg, msLevel = 1L,
+                      mz = chromPeaks(xmse)[1:5, c("mzmin", "mzmax")],
+                      rt = chromPeaks(xmse)[1:5, c("rtmin", "rtmax")])
+    tmp <- xmseg
+    tmp@spectra$msLevel <- 2L
+    expect_true(all(is.na(isolationWindowTargetMz(tmp@spectra))))
+    b <- chromatogram(tmp, msLevel = 2L,
+                      mz = chromPeaks(xmse)[1:5, c("mzmin", "mzmax")],
+                      rt = chromPeaks(xmse)[1:5, c("rtmin", "rtmax")])
+    expect_equal(intensity(a[[1L]]), intensity(b[[1L]]))
 
     ## Defining only mz or rt.
     rtr <- c(2600, 2700)
