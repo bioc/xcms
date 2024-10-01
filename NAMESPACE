@@ -4,7 +4,8 @@ import("methods")
 importMethodsFrom("ProtGenerics", "peaks", "chromatogram", "writeMSData",
     "polarity<-", "centroided", "isCentroided", "peaks<-",
     "isolationWindowTargetMz", "quantify", "bin", "spectrapply",
-    "filterFeatures", "filterMzRange", "filterRt", "filterMz", "filterMsLevel")
+    "filterFeatures", "filterMzRange", "filterRt", "filterMz", "filterMsLevel",
+    "estimatePrecursorIntensity")
 importClassesFrom("ProtGenerics", "Param")
 importFrom("BiocGenerics", "updateObject", "fileName", "subset",
     "dirname", "dirname<-")
@@ -71,6 +72,7 @@ importMethodsFrom("MSnbase", "intensity", "mz", "rtime", "fileNames", "fromFile"
 		  "alignRt", "compareChromatograms", "transformIntensity")
 importFrom("MSnbase", "as.data.frame.Spectrum", "Chromatogram",
     "MChromatograms", "MSpectra", "requiredFvarLabels", "selectFeatureData")
+
 
 export(
     "etg",
@@ -249,18 +251,19 @@ export(
     "hasFilledChromPeaks",
     "plotAdjustedRtime",
     "groupOverlaps",
-    "estimatePrecursorIntensity",
     "featureArea",
     "loadXcmsData",
     "matchLamasChromPeaks",
     "summarizeLamaMatch",
-    "matchedRtimes"
+    "matchedRtimes",
+    "XcmsExperiment"
 )
 
 ## New analysis methods
 exportMethods(
     "showError",
     "findChromPeaks",
+    "estimatePrecursorIntensity",
     "groupChromPeaks",
     "adjustRtime",
     "findChromPeaksIsolationWindow",
@@ -566,7 +569,8 @@ importMethodsFrom("Spectra", "precursorMz")
 importMethodsFrom("Spectra", "$")
 importMethodsFrom("Spectra", "uniqueMsLevels")
 importMethodsFrom("Spectra", "backendBpparam")
-importFrom("Spectra", "MsBackendMemory")
+importMethodsFrom("Spectra", "estimatePrecursorIntensity")
+importFrom("Spectra", "MsBackendMemory", "filterEmptySpectra")
 
 ## MsExperiment things
 importClassesFrom("MsExperiment", "MsExperiment")
@@ -589,14 +593,6 @@ exportMethods("uniqueMsLevels")
 exportMethods("filterMzRange")
 exportMethods("fromFile")
 exportMethods("fileNames")
-
-## saving xcms objects things
-importFrom("jsonlite", "serializeJSON", "write_json", "unserializeJSON",
-           "read_json")
-export("RDataParam")
-export("PlainTextParam")
-export("MzTabParam")
-exportMethods("storeResults")
 
 ## filtering features things
 importFrom("MetaboCoreUtils", "rowRsd", "rowDratio", "rowPercentMissing",

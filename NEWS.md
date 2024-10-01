@@ -1,5 +1,20 @@
 # xcms 4.3
 
+## Changes in version 4.3.3
+
+- Fix issue #755: `chromatogram()` with `msLevel = 2` fails to extract
+  chromatographic data if `isolationWindowTargetMz` is not specified or
+  available (e.g. for MSe data).
+- Support coercing from `XcmsExperiment` to `XCMSnExp` with
+  `as(object, "XCMSnExp")`.
+- Change `estimatePrecursorIntensity()` to a method and add an implementation
+  for `MsExperiment` objects.
+
+## Changes in version 4.3.2
+
+- Remove data/results import/export functionality as it is being developed in
+  the *MsIO* package.
+
 ## Changes in version 4.3.1
 
 - Support excluding samples or sample groups from defining features with

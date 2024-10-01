@@ -121,3 +121,14 @@ test_that("polarity,MsExperiment works", {
     res <- polarity(mse)
     expect_equal(res, polarity(spectra(mse)))
 })
+
+test_that("estimatePrecursorIntensity,MsExperiment works", {
+    ftmt <- msdata::proteomics(full.names = TRUE)[5]
+    library(MsExperiment)
+    tmt <- readMsExperiment(ftmt)
+    res <- estimatePrecursorIntensity(tmt, ppm = 10, tolerance = 0)
+    expect_true(is.numeric(res))
+    expect_equal(length(res), length(spectra(tmt)))
+    expect_true(cor(res, precursorIntensity(tmt@spectra),
+                    use = "pairwise.complete.obs") > 0.9)
+})

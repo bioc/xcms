@@ -114,3 +114,16 @@ setMethod(
             msLevel = msLevel, isolationWindow = isolationWindowTargetMz,
             chunkSize = chunkSize, BPPARAM = BPPARAM)
     })
+
+#' @rdname estimatePrecursorIntensity
+setMethod(
+    "estimatePrecursorIntensity", "MsExperiment",
+    function(object, ppm = 10, tolerance = 0,
+             method = c("previous", "interpolation"),
+             BPPARAM = bpparam()) {
+        method <- match.arg(method)
+        estimatePrecursorIntensity(spectra(object), ppm = ppm,
+                                   tolerance = tolerance, method = method,
+                                   f = spectraSampleIndex(object),
+                                   BPPARAM = BPPARAM)
+})

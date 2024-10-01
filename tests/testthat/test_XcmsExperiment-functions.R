@@ -201,3 +201,33 @@ test_that(".features_ms_region works", {
         xmseg, features = rownames(featureDefinitions(xmseg)))
     expect_equal(rownames(res), rownames(featureDefinitions(xmseg)))
 })
+
+test_that(".xcms_experiment_to_xcms_n_exp works", {
+    library(MsExperiment)
+    a <- XcmsExperiment()
+    res <- xcms:::.xcms_experiment_to_xcms_n_exp(a)
+    expect_s4_class(res, "XCMSnExp")
+    expect_true(length(res) == 0)
+
+    a <- loadXcmsData("xmse")
+    a1 <- a[1]
+    a1@spectra <- Spectra::setBackend(spectra(a1), Spectra::MsBackendMemory())
+    expect_error(xcms:::.xcms_experiment_to_xcms_n_exp(a1), "MsBackendMzR")
+
+    res <- xcms:::.xcms_experiment_to_xcms_n_exp(a)
+    expect_s4_class(res, "XCMSnExp")
+    expect_equal(unname(rtime(res)), rtime(a))
+    expect_equal(chromPeaks(res), chromPeaks(a))
+    expect_equal(chromPeakData(res), chromPeakData(a))
+    expect_equal(featureDefinitions(res), DataFrame(featureDefinitions(a)))
+    expect_equal(res@.processHistory, a@processHistory)
+
+    ref <- loadXcmsData("xdata")
+    expect_equal(rtime(res), rtime(ref))
+
+    expect_true(hasChromPeaks(res))
+    expect_true(hasAdjustedRtime(res))
+    expect_true(hasFeatures(res))
+
+    expect_equal(mz(res[1:3]), mz(ref[1:3]))
+})

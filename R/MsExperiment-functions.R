@@ -462,7 +462,7 @@
     if (length(msLevel) != npks)
         msLevel <- rep(msLevel[1L], npks)
     if (!length(isolationWindow))
-        isolationWindow <- rep(1L, npks)
+        isolationWindow <- rep(NA_real_, npks)
     if (length(isolationWindow) && length(isolationWindow) != npks)
         stop("Length of 'isolationWindow' (if provided) should match the ",
              "number of chromatograms to extract.")

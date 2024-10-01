@@ -791,8 +791,11 @@ groupOverlaps <- function(xmin, xmax) {
 #'     chromatograms should be extracted.
 #'
 #' @param pks_tmz `numeric` with the isolation window target m/z in which
-#'     the (MS2) chromatographic peak was detected. Does not need to be
-#'     provided for MS1 data.
+#'     the (MS2) chromatographic peak was detected. For `pks_msl > 1L` only
+#'     spectra with their `isolationWindowTargetMz` being equal to this value
+#'     are considered for the chromatogram extraction. Set to
+#'     `pks_tmz = NA_real_` to use **all** spectra with matching MS level and
+#'     ignore the isolation window.
 #'
 #' @param file_idx `integer(1)` allowing to optionally set the index of the
 #'     file the EIC is from (parameter `fromFile`).
@@ -803,8 +806,9 @@ groupOverlaps <- function(xmin, xmax) {
 #'
 #' @noRd
 .chromatograms_for_peaks <- function(pd, rt, msl, file_idx = 1L,
-                                     tmz = rep(1L, length(pd)), pks, pks_msl,
-                                     pks_tmz = rep(1L, nrow(pks)),
+                                     tmz = rep(NA_real_, length(pd)), pks,
+                                     pks_msl,
+                                     pks_tmz = rep(NA_real_, nrow(pks)),
                                      aggregationFun = "sum") {
     nr <- nrow(pks)
     pks_msl <- as.integer(pks_msl)
@@ -826,9 +830,9 @@ groupOverlaps <- function(xmin, xmax) {
         slot(res[[i]], "msLevel", check = FALSE) <- pks_msl[i]
         ## if pks_msl > 1: precursor m/z has to match!
         keep <- between(rt, pks[i, rtc]) & msl == pks_msl[i]
-        if (pks_msl[i] > 1L) {
+        if (pks_msl[i] > 1L && !is.na(pks_tmz[i])) {
             ## for DIA MS2: spectra have to match the isolation window.
-            keep <- keep & tmz == pks_tmz[i]
+            keep <- keep & tmz %in% pks_tmz[i]
         }
         keep <- which(keep)             # the get rid of `NA`.
         if (length(keep)) {

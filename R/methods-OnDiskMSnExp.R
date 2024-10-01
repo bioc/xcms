@@ -626,3 +626,55 @@ setMethod(
         validObject(object)
         object
     })
+
+#' @title Estimate precursor intensity for MS level 2 spectra
+#'
+#' @description
+#'
+#' `estimatePrecursorIntensity()` determines the precursor intensity for a MS 2
+#' spectrum based on the intensity of the respective signal from the
+#' neighboring MS 1 spectra (i.e. based on the peak with the m/z matching the
+#' precursor m/z of the MS 2 spectrum). Based on parameter `method` either the
+#' intensity of the peak from the previous MS 1 scan is used
+#' (`method = "previous"`) or an interpolation between the intensity from the
+#' previous and subsequent MS1 scan is used (`method = "interpolation"`, which
+#' considers also the retention times of the two MS1 scans and the retention
+#' time of the MS2 spectrum).
+#'
+#' @param object `MsExperiment`, `XcmsExperiment`, `OnDiskMSnExp` or
+#'     `XCMSnExp` object.
+#'
+#' @param ppm `numeric(1)` defining the maximal acceptable difference (in ppm)
+#'     of the precursor m/z and the m/z of the corresponding peak in the MS 1
+#'     scan.
+#'
+#' @param tolerance `numeric(1)` with the maximal allowed difference of m/z
+#'     values between the precursor m/z of a spectrum and the m/z of the
+#'     respective ion on the MS1 scan.
+#'
+#' @param method `character(1)` defining the method how the precursor intensity
+#'     should be determined (see description above for details). Defaults to
+#'     `method = "previous"`.
+#'
+#' @param BPPARAM parallel processing setup. See [bpparam()] for details.
+#'
+#' @return `numeric` with length equal to the number of spectra in `x`. `NA` is
+#'     returned for MS 1 spectra or if no matching peak in a MS 1 scan can be
+#'     found for an MS 2 spectrum
+#'
+#' @author Johannes Rainer with feedback and suggestions from Corey Broeckling
+#'
+#' @md
+#'
+#' @rdname estimatePrecursorIntensity
+setMethod(
+    "estimatePrecursorIntensity", "OnDiskMSnExp",
+    function(object, ppm = 10, tolerance = 0,
+             method = c("previous", "interpolation"),
+             BPPARAM = bpparam()) {
+        method <- match.arg(method)
+        unlist(bplapply(.split_by_file2(object, subsetFeatureData = FALSE),
+                        .estimate_prec_intensity, ppm = ppm,
+                        tolerance = tolerance, method = method,
+                        BPPARAM = BPPARAM), use.names = FALSE)
+    })

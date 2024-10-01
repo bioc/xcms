@@ -1134,3 +1134,80 @@ featureArea <- function(object, mzmin = min, mzmax = max, rtmin = min,
         object@chromPeaks
     else chromPeaks(object@msFeatureData)
 }
+
+#' function to create an empty `XcmsExperiment` object
+#'
+#' @noRd
+XcmsExperiment <- function() {
+    as(MsExperiment(), "XcmsExperiment")
+}
+
+#' function to convert an XcmsExperiment into an XCMSnExp.
+#'
+#' @author Johannes Rainer
+#'
+#' @noRd
+.xcms_experiment_to_xcms_n_exp <- function(from) {
+    requireNamespace("MSnbase", quietly = TRUE)
+    n <- new("XCMSnExp")
+    if (!length(from))
+        return(n)
+    m <- new("MsFeatureData")
+    ## works only if we have a MsBackendMzR
+    if (!inherits(spectra(from)@backend, "MsBackendMzR"))
+        stop("Can not convert 'from' to a 'XCMSnExp' object: 'spectra(x)' uses",
+             "an MS backend other than 'MsBackendMzR'. Currently, only",
+             " coercion of an object with a 'MsBackendMzR' is supported.")
+    ## works only if we have an empty processing queue
+    if (length(spectra(from)@processingQueue) > 0)
+        stop("Can not convert 'from' to a 'XCMSnExp' object: processing queue",
+             " of the Spectra object is not empty.")
+    ## -> OnDiskMSnExp
+    n@processingData <- new("MSnProcess",
+                            processing = paste0("Data converted [", date(), "]"),
+                            files = fileNames(from),
+                            smoothed = NA)
+    n@phenoData <- new("NAnnotatedDataFrame", as.data.frame(sampleData(from)))
+    fd <- as.data.frame(from@spectra@backend@spectraData)
+    fnames <- unique(fd$dataStorage)
+    fd$fileIdx <- match(fd$dataStorage, fnames)
+    fd <- fd[, !colnames(fd) %in% c("dataStorage", "dataOrigin")]
+    colnames(fd) <- sub("scanIndex", "spIdx", colnames(fd))
+    colnames(fd) <- sub("rtime", "retentionTime", colnames(fd))
+    colnames(fd) <- sub("precScanNum", "precursorScanNum", colnames(fd))
+    colnames(fd) <- sub("precursorMz", "precursorMZ", colnames(fd))
+    fd$spectrum <- seq_len(nrow(fd))
+    rownames(fd) <- MSnbase:::formatFileSpectrumNames(
+                                  fd$fileIdx, fd$spIdx,
+                                  max(fd$fileIdx), max(fd$spIdx))
+    n@featureData <- new("AnnotatedDataFrame", fd)
+    nf <- length(fnames)
+    n@experimentData <- new("MIAPE",
+                            instrumentManufacturer = rep(NA_character_, nf),
+                            instrumentModel = rep(NA_character_, nf),
+                            ionSource = rep(NA_character_, nf),
+                            analyser = rep(NA_character_, nf),
+                            detectorType = rep(NA_character_, nf))
+    n@processingData <- new("MSnProcess",
+                            processing = paste0("Coercion from ",
+                                                class(from)[1L],
+                                                " [", date(), "]"),
+                            files = fnames)
+    ## -> XCMSnExp
+    if (hasChromPeaks(from)) {
+        chromPeaks(m) <- chromPeaks(from)
+        chromPeakData(m) <- chromPeakData(from)
+    }
+    if (hasAdjustedRtime(from)) {
+        art <- fd$retentionTime_adjusted
+        names(art) <- rownames(fd)
+        adjustedRtime(m) <- split(art, fd$fileIdx)
+    }
+    if (hasFeatures(from))
+        featureDefinitions(m) <- DataFrame(featureDefinitions(from))
+    lockEnvironment(m, bindings = TRUE)
+    n@msFeatureData <- m
+    n@.processHistory <- from@processHistory
+    validObject(n)
+    n
+}

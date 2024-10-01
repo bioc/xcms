@@ -343,9 +343,9 @@ test_that(".mse_chromatogram works", {
     res <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L)
     expect_true(validObject(res))
     expect_equal(msLevel(res[[1L]]), 2L)
-    expect_true(length(intensity(res[[1L]])) == 0)
+    expect_true(length(intensity(res[[1L]])) > 0)
     expect_equal(msLevel(res[[2L]]), 2L)
-    expect_true(length(intensity(res[[2L]])) == 0)
+    expect_true(length(intensity(res[[2L]])) > 0)
 
     ## Set isolationWindowTargetMz.
     isolationWindowTargetMz(spectra(mse_dda)) <- as.numeric(
@@ -354,13 +354,16 @@ test_that(".mse_chromatogram works", {
                  c(81, 83))
     rtr <- rbind(c(10, 700),
                  c(10, 700))
-    res <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L,
+    res <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L)
+    res2 <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L,
                                     isolationWindow = c(56, 40))
-    expect_true(all(intensity(res[[1L]]) > 0))
-    expect_true(length(intensity(res[[2L]])) == 0)
-    res <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L,
-                             isolationWindow = c(56, 82))
-    expect_true(all(intensity(res[[1L]]) > 0))
+    expect_true(all(intensity(res2[[1L]]) > 0))
+    expect_true(length(intensity(res2[[2L]])) == 0)
+    expect_true(length(rtime(res[[1L]])) > length(rtime(res2[[1L]])))
+    res2 <- .mse_chromatogram(mse_dda, rt = rtr, mz = mzr, msLevel = 2L,
+                                     isolationWindow = c(56, 82))
+    expect_true(all(intensity(res2[[1L]]) > 0))
+    expect_true(length(intensity(res[[1L]])) > length(intensity(res2[[1L]])))
     expect_true(all(intensity(res[[2L]]) > 0, na.rm = TRUE))
 
     ## Can extract chromatograms if providing the correct isolationWindow.
