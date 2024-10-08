@@ -1,5 +1,14 @@
 # xcms 4.3
 
+## Changes in version 4.3.4
+
+- Small update to the `matchLamaChromPeaks()` function to get the chromPeaksId
+  of the chromPeaks matched with Lamas. 
+- Small fix to the .yml file for the github actions, so they do not crash on 
+  warnings.
+
+
+
 ## Changes in version 4.3.3
 
 - Fix issue #755: `chromatogram()` with `msLevel = 2` fails to extract
