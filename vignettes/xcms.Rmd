@@ -1196,24 +1196,24 @@ Both examples are shown below:
 
 ```{r}
 # To set up parameter `f` to filter only based on QC samples
-f <- sampleData(filtered_faakho)$sample_type
+f <- sampleData(faahko)$sample_type
 f[f != "QC"] <- NA
 
 # To set up parameter `f` to filter per sample type excluding QC samples
-f <- sampleData(filtered_faakho)$sample_type
+f <- sampleData(faahko)$sample_type
 f[f == "QC"] <- NA
 
 missing_filter <- PercentMissingFilter(threshold = 30,
                                        f = f)
 
 # Apply the filter to faakho object
-filtered_faakho <- filterFeatures(object = filtered_faakho,
+filtered_faakho <- filterFeatures(object = faahko,
                                   filter = missing_filter)
 
 # Apply the filter to res object
 missing_filter <- PercentMissingFilter(threshold = 30,
                                        f = f)
-filtered_res <- filterFeatures(object = filtered_res,
+filtered_res <- filterFeatures(object = res,
                                filter = missing_filter)
 ```
 
@@ -1238,14 +1238,14 @@ as demonstrated below:
 ```{r}
 # Set up parameters for RsdFilter
 rsd_filter <- RsdFilter(threshold = 0.3,
-                        qcIndex = sampleData(faahko)$sample_type == "QC")
+                        qcIndex = sampleData(filtered_faahko)$sample_type == "QC")
 
 # Apply the filter to faakho object
-filtered_faahko <- filterFeatures(object = faahko, filter = rsd_filter)
+filtered_faahko <- filterFeatures(object = filtered_faahko, filter = rsd_filter)
 
 # Now apply the same strategy to the res object
-rsd_filter <- RsdFilter(threshold = 0.3, qcIndex = res$sample_type == "QC")
-filtered_res <- filterFeatures(object = res, filter = rsd_filter, assay = "raw")
+rsd_filter <- RsdFilter(threshold = 0.3, qcIndex = filtered_res$sample_type == "QC")
+filtered_res <- filterFeatures(object = filtered_res, filter = rsd_filter, assay = "raw")
 ```
 
 All features with an RSD (CV) strictly larger than 0.3 in QC samples were thus
