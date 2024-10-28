@@ -1205,9 +1205,8 @@ f[f == "QC"] <- NA
 
 missing_filter <- PercentMissingFilter(threshold = 30,
                                        f = f)
-
 # Apply the filter to faakho object
-filtered_faakho <- filterFeatures(object = faahko,
+filtered_faahko <- filterFeatures(object = faahko,
                                   filter = missing_filter)
 
 # Apply the filter to res object
