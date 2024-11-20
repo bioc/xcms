@@ -831,6 +831,8 @@
             ids <- rep(rownames(pk), lengths(idx))
             res <- sp[unlist(idx)]
             res$peak_id <- ids
+            info <- pk[res$peak_id, peaksInfo]
+            colnames(info) <- paste("peak_", peaksInfo, sep = "")
             res2@backend@spectraData <- cbind(res2@backend@spectraData, info)
             res
         },
