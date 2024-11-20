@@ -1,3 +1,9 @@
+# xcms 4.5.1
+
+## Changes in version 4.5.1
+
+- Fix compile errors with R-4.5
+
 # xcms 4.3
 
 ## Changes in version 4.3.4
