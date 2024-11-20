@@ -833,7 +833,7 @@
             res$peak_id <- ids
             info <- pk[res$peak_id, peaksInfo]
             colnames(info) <- paste("peak_", peaksInfo, sep = "")
-            res2@backend@spectraData <- cbind(res2@backend@spectraData, info)
+            res@backend@spectraData <- cbind(res@backend@spectraData, info)
             res
         },
         MoreArgs = list(msLevel = msLevel, method = method),
