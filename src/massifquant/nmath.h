@@ -46,7 +46,7 @@ double  gamma_cody(double);
 #ifndef MATHLIB_STANDALONE
 
 #include <R_ext/Error.h>
-# define MATHLIB_ERROR(fmt,x)       error(fmt,x);
+# define MATHLIB_ERROR(fmt,x)       Rf_error(fmt,x);
 # define MATHLIB_WARNING(fmt,x)     warning(fmt,x)
 # define MATHLIB_WARNING2(fmt,x,x2) warning(fmt,x,x2)
 # define MATHLIB_WARNING3(fmt,x,x2,x3)  warning(fmt,x,x2,x3)
