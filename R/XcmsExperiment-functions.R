@@ -793,7 +793,8 @@
                                                  "largest_bpi"),
                                    msLevel = 2L, expandRt = 0, expandMz = 0,
                                    ppm = 0, skipFilled = FALSE,
-                                   peaks = integer(), BPPARAM = bpparam()) {
+                                   peaks = integer(), peaksInfo = c("rt", "mz"),
+                                   BPPARAM = bpparam()) {
     method <- match.arg(method)
     pks <- .chromPeaks(x)[, c("mz", "mzmin", "mzmax", "rt",
                               "rtmin", "rtmax", "maxo", "sample")]
@@ -830,6 +831,7 @@
             ids <- rep(rownames(pk), lengths(idx))
             res <- sp[unlist(idx)]
             res$peak_id <- ids
+            res2@backend@spectraData <- cbind(res2@backend@spectraData, info)
             res
         },
         MoreArgs = list(msLevel = msLevel, method = method),

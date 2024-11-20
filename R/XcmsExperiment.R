@@ -515,6 +515,10 @@
 #'     indicating the identified chromatographic peaks. Only a single color
 #'     is supported. Defaults to `peakCol = "#ff000060".
 #'
+#' @param peaksInfo For `chromPeakSpectra`: `character`  vector of additional
+#'    information from `chromPeaks()` to be added to the spectra object. The
+#'    columns names will be appended with "peaks_".
+#'
 #' @param ppm For `chromPeaks` and `featureDefinitions`: optional `numeric(1)`
 #'     specifying the ppm by which the m/z range (defined by `mz` should be
 #'     extended. For a value of `ppm = 10`, all peaks within `mz[1] - ppm / 1e6`
@@ -1228,7 +1232,7 @@ setMethod(
     function(object, method = c("all", "closest_rt", "closest_mz",
                                 "largest_tic", "largest_bpi"),
              msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
-             skipFilled = FALSE, peaks = character(),
+             skipFilled = FALSE, peaks = character(), peaksInfo = c("rt", "mz")
              return.type = c("Spectra", "List"), BPPARAM = bpparam()) {
         if (hasAdjustedRtime(object))
             object <- applyAdjustedRtime(object)
@@ -1244,7 +1248,7 @@ setMethod(
         else pkidx <- integer()
         res <- .mse_spectra_for_peaks(object, method, msLevel, expandRt,
                                       expandMz, ppm, skipFilled, pkidx,
-                                      BPPARAM)
+                                      peaksInfo, BPPARAM)
         if (!length(pkidx))
             peaks <- rownames(.chromPeaks(object))
         else peaks <- rownames(.chromPeaks(object))[pkidx]
