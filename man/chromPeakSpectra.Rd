@@ -18,6 +18,7 @@ chromPeakSpectra(object, ...)
   ppm = 0,
   skipFilled = FALSE,
   peaks = character(),
+  peaksInfo = c("rt", "mz"),
   return.type = c("Spectra", "List"),
   BPPARAM = bpparam()
 )

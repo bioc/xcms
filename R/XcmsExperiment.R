@@ -1232,7 +1232,7 @@ setMethod(
     function(object, method = c("all", "closest_rt", "closest_mz",
                                 "largest_tic", "largest_bpi"),
              msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
-             skipFilled = FALSE, peaks = character(), peaksInfo = c("rt", "mz")
+             skipFilled = FALSE, peaks = character(), peaksInfo = c("rt", "mz"),
              return.type = c("Spectra", "List"), BPPARAM = bpparam()) {
         if (hasAdjustedRtime(object))
             object <- applyAdjustedRtime(object)
