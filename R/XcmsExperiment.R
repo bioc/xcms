@@ -1232,7 +1232,9 @@ setMethod(
     function(object, method = c("all", "closest_rt", "closest_mz",
                                 "largest_tic", "largest_bpi"),
              msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
-             skipFilled = FALSE, peaks = character(), peaksInfo = c("rt", "mz"),
+             skipFilled = FALSE, peaks = character(),
+             addColumnsChromPeaks = c("rt", "mz"),
+             addColumnsChromPeaksPrefix = "chrom_peak_",
              return.type = c("Spectra", "List"), BPPARAM = bpparam()) {
         if (hasAdjustedRtime(object))
             object <- applyAdjustedRtime(object)
@@ -1248,14 +1250,19 @@ setMethod(
         else pkidx <- integer()
         res <- .mse_spectra_for_peaks(object, method, msLevel, expandRt,
                                       expandMz, ppm, skipFilled, pkidx,
-                                      peaksInfo, BPPARAM)
+                                      addColumnsChromPeaks,
+                                      addColumnsChromPeaksPrefix,
+                                      BPPARAM)
         if (!length(pkidx))
             peaks <- rownames(.chromPeaks(object))
         else peaks <- rownames(.chromPeaks(object))[pkidx]
-        if (return.type == "Spectra")
-            res <- res[as.matrix(findMatches(peaks, res$peak_id))[, 2L]]
-        else
-            as(split(res, factor(res$peak_id, levels = peaks)), "List")
+        if (return.type == "Spectra") {
+            col <- paste0(addColumnsChromPeaksPrefix, "id")
+            res <- res[as.matrix(findMatches(peaks, res[[col]]))[, 2L]]
+        } else {
+            col <- paste0(addColumnsChromPeaksPrefix, "id")
+            as(split(res, factor(res[[col]], levels = peaks)), "List")
+        }
     })
 
 #' @rdname reconstructChromPeakSpectra

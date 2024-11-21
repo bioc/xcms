@@ -793,7 +793,9 @@
                                                  "largest_bpi"),
                                    msLevel = 2L, expandRt = 0, expandMz = 0,
                                    ppm = 0, skipFilled = FALSE,
-                                   peaks = integer(), peaksInfo = c("rt", "mz"),
+                                   peaks = integer(),
+                                   addColumnsChromPeaks = c("rt", "mz"),
+                                   addColumnsChrompeaksPrefix = "chrom_peak_",
                                    BPPARAM = bpparam()) {
     method <- match.arg(method)
     pks <- .chromPeaks(x)[, c("mz", "mzmin", "mzmax", "rt",
@@ -819,7 +821,8 @@
     res <- bpmapply(
         split.data.frame(pks, f),
         split(spectra(x), factor(fromFile(x), levels = levels(f))),
-        FUN = function(pk, sp, msLevel, method) {
+        FUN = function(pk, sp, msLevel, method, addColumnsChromPeaks,
+                       addColumnsChrompeaksPrefix) {
             sp <- filterMsLevel(sp, msLevel)
             idx <- switch(
                 method,
@@ -830,13 +833,17 @@
                 largest_bpi = .spectra_index_list_largest_bpi(sp, pk, msLevel))
             ids <- rep(rownames(pk), lengths(idx))
             res <- sp[unlist(idx)]
-            res$peak_id <- ids
-            info <- pk[res$peak_id, peaksInfo]
-            colnames(info) <- paste("peak_", peaksInfo, sep = "")
-            res@backend@spectraData <- cbind(res@backend@spectraData, info)
+            pk_data <- DataFrame(pk[ids, addColumnsChromPeaks, drop = FALSE])
+            pk_data$id <- ids
+            colnames(pk_data) <- paste0(addColumnsChrompeaksPrefix,
+                                          colnames(pk_data))
+            pk_data$spectrumId <- res$spectrumId
+            res <- Spectra::joinSpectraData(res, pk_data)
             res
         },
-        MoreArgs = list(msLevel = msLevel, method = method),
+        MoreArgs = list(msLevel = msLevel, method = method,
+                        addColumnsChromPeaks = addColumnsChromPeaks,
+                        addColumnsChrompeaksPrefix = addColumnsChrompeaksPrefix),
         BPPARAM = BPPARAM)
     Spectra:::.concatenate_spectra(res)
 }
