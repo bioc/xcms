@@ -18,6 +18,9 @@ featureSpectra(object, ...)
   skipFilled = FALSE,
   return.type = c("Spectra", "List"),
   features = character(),
+  addColumnsFeatures = c("rtmed", "mzmed"),
+  addColumnsFeaturesPrefix = "feature_",
+  addColumnsChromPeaksPrefix = "chrom_peak_",
   ...
 )
 
@@ -63,6 +66,20 @@ be returned (providing either their ID, a logical vector same length
 than \code{nrow(featureDefinitions(x))} or their index in
 \code{featureDefinitions(x)}). This parameter overrides \code{skipFilled} and is
 only supported for \code{return.type} being either \code{"Spectra"} or \code{"List"}.}
+
+\item{addColumnsFeatures}{\code{character} vector with the names of the columns
+from \code{featureDefinitions} that should be added to the returned spectra
+object. The columns will be named as they are written in the
+\code{featureDefinitions} object with a prefix that is defined by the parameter
+\code{addColumnsFeaturesPrefix}. Defaults to \code{c("mzmed", "rtmed")}.}
+
+\item{addColumnsFeaturesPrefix}{\code{character(1)} defining the prefix that
+should be used for the columns from \code{featureDefinitions} that are added
+to the returned spectra object. Defaults to \code{"feature_"}.}
+
+\item{addColumnsChromPeaksPrefix}{\code{character(1)} defining the prefix that
+should be used for the columns from \code{chromPeaks} that are added to the
+returned spectra object. Defaults to \code{"chrom_peak_"}.}
 }
 \value{
 The function returns either a \code{\link[=Spectra]{Spectra()}} (for \code{return.type = "Spectra"})
@@ -96,10 +113,24 @@ feature are returned. With any other option for \code{method}, a single
 spectrum \strong{per chromatographic peak} will be returned (hence multiple
 spectra per feature).
 
-The ID of each chromatographic peak (i.e. its row name in \code{chromPeaks})
-and each feature (i.e., its row name in \code{featureDefinitions}) are
-available in the returned \code{\link[=Spectra]{Spectra()}} with spectra variables \code{"peak_id"}
-and \code{"feature_id"}, respectively.
+The information from \code{featureDefinitions} for each feature can be included
+in the returned \code{\link[=Spectra]{Spectra()}} object using the \code{addColumnsFeatures} parameter.
+This is useful for retaining details such as the median retention time (\code{rtmed})
+or median m/z (\code{mzmed}). The columns will retain their names as specified
+in the \code{featureDefinitions} object, prefixed by the value of the
+\code{addColumnsFeaturesPrefix} parameter. Additionally, the \emph{feature ID}
+(i.e., the row name of the feature in the \code{featureDefinitions} data.frame)
+is always added as a metadata column with the name
+\code{paste0(addColumnsFeaturesPrefix, "id")}, which defaults to \code{"feature_id"}.
+
+See also \code{\link[=chromPeakSpectra]{chromPeakSpectra()}}, as it supports a similar parameter for
+including columns from the chromatographic peaks in the returned spectra object.
+These parameters can be used in combination to include information from both
+the chromatographic peaks and the features in the returned \code{\link[=Spectra]{Spectra()}}.
+The \emph{peak ID} (i.e., the row name of the peak in the \code{chromPeaks} matrix)
+is added as a metadata column with the name
+\code{paste0(addColumnsChromPeaksPrefix, "id")}, which defaults to
+\code{"chrom_peak_id"}.
 }
 \author{
 Johannes Rainer

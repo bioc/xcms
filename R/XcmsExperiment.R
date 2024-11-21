@@ -515,10 +515,6 @@
 #'     indicating the identified chromatographic peaks. Only a single color
 #'     is supported. Defaults to `peakCol = "#ff000060".
 #'
-#' @param peaksInfo For `chromPeakSpectra`: `character`  vector of additional
-#'    information from `chromPeaks()` to be added to the spectra object. The
-#'    columns names will be appended with "peaks_".
-#'
 #' @param ppm For `chromPeaks` and `featureDefinitions`: optional `numeric(1)`
 #'     specifying the ppm by which the m/z range (defined by `mz` should be
 #'     extended. For a value of `ppm = 10`, all peaks within `mz[1] - ppm / 1e6`
@@ -1784,7 +1780,11 @@ setMethod(
     "featureSpectra", "XcmsExperiment",
     function(object, msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
              skipFilled = FALSE, return.type = c("Spectra", "List"),
-             features = character(), ...) {
+             features = character(),
+             addColumnsFeatures = c("rtmed", "mzmed"),
+             addColumnsFeaturesPrefix = "feature_",
+             addColumnsChromPeaksPrefix = "chrom_peak_",
+             ...) {
         return.type <- match.arg(return.type)
         if (!hasFeatures(object))
             stop("No feature definitions present. Please run ",
@@ -1803,13 +1803,18 @@ setMethod(
         sps <- .mse_spectra_for_peaks(
             object, msLevel = msLevel, expandRt = expandRt,
             expandMz = expandMz, ppm = ppm, skipFilled = skipFilled,
-            peaks = unique(pindex), ...)
+            peaks = unique(pindex),
+            addColumnsChromPeaksPrefix = addColumnsChromPeaksPrefix)
+        col <- paste0(addColumnsChromPeaksPrefix, "id")
         mtch <- as.matrix(
-            findMatches(sps$peak_id, rownames(.chromPeaks(object))[pindex]))
+            findMatches(sps[[col]], rownames(.chromPeaks(object))[pindex]))
         sps <- sps[mtch[, 1L]]
         fid <- rep(
             ufeatures, lengths(featureDefinitions(object)$peakidx[findex]))
-        sps$feature_id <- fid[mtch[, 2L]]
+        f_data <- featureDefinitions(object)[fid[mtch[, 2L]], addColumnsFeatures]
+        f_data$id <- fid[mtch[, 2L]]
+        colnames(f_data) <- paste0(addColumnsFeaturesPrefix, colnames(f_data))
+        sps <- .add_spectra_data(sps, f_data)
         if (return.type == "List") {
             sps <- List(split(sps, f = factor(sps$feature_id,
                                               levels = ufeatures)))

@@ -18,7 +18,8 @@ chromPeakSpectra(object, ...)
   ppm = 0,
   skipFilled = FALSE,
   peaks = character(),
-  peaksInfo = c("rt", "mz"),
+  addColumnsChromPeaks = c("rt", "mz"),
+  addColumnsChromPeaksPrefix = "chrom_peak_",
   return.type = c("Spectra", "List"),
   BPPARAM = bpparam()
 )
@@ -65,6 +66,16 @@ subset of chromatographic peaks in \code{chromPeaks} for which spectra should
 be returned (providing either their ID, a logical vector same length
 than \code{nrow(chromPeaks(x))} or their index in \code{chromPeaks(x)}). This
 parameter overrides \code{skipFilled}.}
+
+\item{addColumnsChromPeaks}{\code{character} vector with the names of the columns
+from \code{chromPeaks} that should be added to the returned spectra object.
+The columns will be named as they are written in the \code{chromPeaks} object
+with a prefix that is defined by the parameter
+\code{addColumnsChromPeaksPrefix}. Defaults to \code{c("mz", "rt")}.}
+
+\item{addColumnsChromPeaksPrefix}{\code{character(1)} defining the prefix that
+should be used for the columns from \code{chromPeaks} that are added to the
+returned spectra object. Defaults to \code{"chrom_peak_"}.}
 
 \item{return.type}{\code{character(1)} defining the type of result object that
 should be returned.}
@@ -125,14 +136,21 @@ signal (\code{"maxo"}); only supported for \code{msLevel = 2L}.
 
 Parameter \code{return.type} allows to specify the \emph{type} of the result object.
 With \code{return.type = "Spectra"} (the default) a \link{Spectra} object with all
-matching spectra is returned. The spectra variable \code{"peak_id"} of the
-returned \code{Spectra} contains the ID of the chromatographic peak (i.e., the
-rowname of the peak in the \code{chromPeaks} matrix) for each spectrum.
-With \code{return.type = "Spectra"} a \code{List} of \code{Spectra} is returned. The
-length of the list is equal to the number of rows of \code{chromPeaks}. Each
-element of the list contains thus a \code{Spectra} with all spectra for one
-chromatographic peak (or a \code{Spectra} of length 0 if no spectrum was found
-for the respective chromatographic peak).
+matching spectra is returned. With \code{return.type = "Spectra"} a \code{List} of
+\code{Spectra} is returned. The length of the list is equal to the number of rows
+of \code{chromPeaks}. Each element of the list contains thus a \code{Spectra} with all
+spectra for one chromatographic peak (or a \code{Spectra} of length 0 if no
+spectrum was found for the respective chromatographic peak).
+
+Parameters \code{addColumnsChromPeaks} allow the user to add specific metadata
+columns from the chromatographic peaks (\code{chromPeaks}) to the returned
+spectra object. This can be useful to retain information such as retention
+time (\code{rt}), m/z (\code{mz}). The columns will be named as they is written in the
+\code{chromPeaks} object with a prefix that is defined by the parameter
+\code{addColumnsChromPeaksPrefix}. The \emph{peak ID} (i.e., the row name of the
+peak in the \code{chromPeaks} matrix) is always added to the spectra object as
+metadata column \code{paste0(addColumnsChromPeaksPrefix,id)}, by default it will
+be \code{"chrom_peak_id"}.
 
 See also the \emph{LC-MS/MS data analysis} vignette for more details and examples.
 }
@@ -155,7 +173,7 @@ ms2_sps
 ## spectra variable *peak_id* contain the row names of the peaks in the
 ## chromPeak matrix and allow thus to map chromatographic peaks to the
 ## returned MS2 spectra
-ms2_sps$peak_id
+ms2_sps$chrom_peak_id
 chromPeaks(dda)
 
 ## Alternatively, return the result as a List of Spectra objects. This list

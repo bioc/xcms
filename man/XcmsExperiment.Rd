@@ -396,10 +396,6 @@ also parameter \code{type} below for additional information.}
 \item{keepFeatures}{for most subsetting functions (\code{[}, \code{filterFile}):
 \code{logical(1)}: wheter eventually present feature definitions should
 be retained in the returned (filtered) object.}
-
-\item{peaksInfo}{For \code{chromPeakSpectra}: \code{character}  vector of additional
-information from \code{chromPeaks()} to be added to the spectra object. The
-columns names will be appended with "peaks_".}
 }
 \description{
 The \code{XcmsExperiment} is a data container for \code{xcms} preprocessing results
