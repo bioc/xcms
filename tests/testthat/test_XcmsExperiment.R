@@ -963,6 +963,8 @@ test_that("chromPeakSpectra works", {
     expect_equal(rtime(res2[1L]), rtime(res[res$chrom_peak_id == pks[1L]])[idx[1L]])
     expect_equal(rtime(res2[2L]), rtime(res[res$chrom_peak_id == pks[2L]])[idx[2L]])
     expect_equal(rtime(res2[3L]), rtime(res[res$chrom_peak_id == pks[3L]])[idx[3L]])
+    expect_true(all(c("chrom_peak_id", "chrom_peak_mz", "chrom_peak_rt") %in%
+                   spectraVariables(res2)))
 
     res2 <- chromPeakSpectra(xmse, msLevel = 1L, method = "largest_bpi",
                              peaks = pks, return.type = "List")
@@ -974,8 +976,6 @@ test_that("chromPeakSpectra works", {
     expect_equal(rtime(res2[[1L]]), rtime(res[res$chrom_peak_id == pks[1L]])[idx[1L]])
     expect_equal(rtime(res2[[2L]]), rtime(res[res$chrom_peak_id == pks[2L]])[idx[2L]])
     expect_equal(rtime(res2[[3L]]), rtime(res[res$chrom_peak_id == pks[3L]])[idx[3L]])
-    expect(all(c("chrom_peak_id", "chrom_peak_mz", "chrom_peak_rt") %in%
-               spectraVariables(res2)))
 
     ## DDA data
     fl <- system.file("TripleTOF-SWATH/PestMix1_DDA.mzML", package = "msdata")
@@ -1107,10 +1107,10 @@ test_that("featureSpectra works", {
     res_2 <- featureSpectra(xmseg, msLevel = 1L, features = c("FT03", "FT01"),
                             return.type = "List")
     expect_true(length(res[[1L]]) < length(res_2[[1L]]))
-    expect_true(all(res[[1L]]$peak_id %in% res_2[[1L]]$peak_id))
+    expect_true(all(res[[1L]]$chrom_peak_id %in% res_2[[1L]]$chrom_peak_id))
     expect_equal(unique(res[[1L]]$feature_id), unique(res_2[[1L]]$feature_id))
     expect_true(length(res[[2L]]) < length(res_2[[2L]]))
-    expect_true(all(res[[2L]]$peak_id %in% res_2[[2L]]$peak_id))
+    expect_true(all(res[[2L]]$chrom_peak_id %in% res_2[[2L]]$chrom_peak_id))
     expect_equal(unique(res[[2L]]$feature_id), unique(res_2[[2L]]$feature_id))
 })
 

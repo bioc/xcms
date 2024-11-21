@@ -1804,7 +1804,7 @@ setMethod(
             object, msLevel = msLevel, expandRt = expandRt,
             expandMz = expandMz, ppm = ppm, skipFilled = skipFilled,
             peaks = unique(pindex),
-            addColumnsChromPeaksPrefix = addColumnsChromPeaksPrefix)
+            addColumnsChromPeaksPrefix = addColumnsChromPeaksPrefix, ...)
         col <- paste0(addColumnsChromPeaksPrefix, "id")
         mtch <- as.matrix(
             findMatches(sps[[col]], rownames(.chromPeaks(object))[pindex]))
