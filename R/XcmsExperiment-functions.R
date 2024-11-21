@@ -823,7 +823,7 @@
         split(spectra(x), factor(fromFile(x), levels = levels(f))),
         FUN = function(pk, sp, msLevel, method, addColumnsChromPeaks,
                        addColumnsChromPeaksPrefix) {
-            sp <- Spectra::filterMsLevel(sp, msLevel)
+            sp <- filterMsLevel(sp, msLevel)
             idx <- switch(
                 method,
                 all = .spectra_index_list(sp, pk, msLevel),
@@ -833,8 +833,9 @@
                 largest_bpi = .spectra_index_list_largest_bpi(sp, pk, msLevel))
             ids <- rep(rownames(pk), lengths(idx))
             res <- sp[unlist(idx)]
-            pk_data <- pk[ids, addColumnsChromPeaks, drop = FALSE]
-            pk_data <- cbind(pk_data, id = ids)
+            pk_data <- as.data.frame(pk[ids, addColumnsChromPeaks,
+                                        drop = FALSE])
+            pk_data$id <- ids
             colnames(pk_data) <- paste0(addColumnsChromPeaksPrefix,
                                           colnames(pk_data))
             res <- .add_spectra_data(res, pk_data)
