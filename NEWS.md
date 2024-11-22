@@ -1,6 +1,6 @@
-# xcms 4.5
+# xcms 4.5.2
 
-## Changes in version 4.5.1
+## Changes in version 4.5.2
 
 - Small update to `featureSpectra()` and `chromPeakSpectra()` to allow addition
   of `chromPeaks()` and `featuresDefinitions()` columns to be added to the
@@ -9,7 +9,11 @@
   the outdated normalisation paragraph.In depth discussion on this subject can 
   be found on `metabonaut`. 
 
-# 4.3
+## Changes in version 4.5.1
+
+- Fix compile errors with R-4.5
+
+# xcms 4.3
 
 ## Changes in version 4.3.4
 
