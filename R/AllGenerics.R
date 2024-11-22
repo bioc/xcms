@@ -417,10 +417,10 @@ setGeneric("chromPeakData<-", function(object, value)
 #' spectra for one chromatographic peak (or a `Spectra` of length 0 if no
 #' spectrum was found for the respective chromatographic peak).
 #'
-#' Parameters `chromPeakColumns` allow the user to add specific metadata
+#' Parameter `chromPeakColumns` allows the user to add specific metadata
 #' columns from the chromatographic peaks (`chromPeaks`) to the returned
-#' spectra object. This can be useful to retain information such as retention
-#' time (`rt`), m/z (`mz`). The columns will be named as they is written in the
+#' spectra object. This can be useful to keep information such as retention
+#' time (`rt`), m/z (`mz`). The columns will be named as they are written in the
 #' `chromPeaks` object with the prefix `"chrom_peak_"`. The *peak ID*
 #' (i.e., the row name of the peak in the `chromPeaks` matrix) is always added
 #' to the spectra object as a metadata column named `"chrom_peak_id"`.
@@ -811,7 +811,7 @@ setGeneric("featureDefinitions<-", function(object, value)
 #'
 #' The information from `featureDefinitions` for each feature can be included
 #' in the returned [Spectra()] object using the `featureColumns` parameter.
-#' This is useful for retaining details such as the median retention time (`rtmed`)
+#' This is useful for keeping details such as the median retention time (`rtmed`)
 #' or median m/z (`mzmed`). The columns will retain their names as specified
 #' in the `featureDefinitions` object, prefixed by `"feature_"`
 #' (e.g., `"feature_mzmed"`). Additionally, the *feature ID* (i.e., the row

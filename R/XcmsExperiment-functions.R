@@ -797,8 +797,12 @@
                                    chromPeakColumns = c("rt", "mz"),
                                    BPPARAM = bpparam()) {
     method <- match.arg(method)
-    pks <- .chromPeaks(x)[, c("mz", "mzmin", "mzmax", "rt",
-                              "rtmin", "rtmax", "maxo", "sample")]
+    if (!chromPeakColumns %in% colnames(.chromPeaks(x)))
+        stop("One or more of the columns in 'chromPeakColumns' are not ",
+             "available in the 'chromPeaks' data.")
+    pks <- .chromPeaks(x)[, union(c("mz", "mzmin", "mzmax", "rt",
+                              "rtmin", "rtmax", "maxo", "sample"),
+                              chromPeakColumns)]
     if (ppm != 0)
         expandMz <- expandMz + pks[, "mz"] * ppm / 1e6
     if (expandMz[1L] != 0) {

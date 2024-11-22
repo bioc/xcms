@@ -939,6 +939,9 @@ test_that("chromPeakSpectra works", {
     expect_error(chromPeakSpectra(xmse, peaks = "other"), "out of bounds")
 
     pks <- c("CP242", "CP007", "CP123")
+
+    expect_error(chromPeakSpectra(xmse, peaks = pks,
+                                  chromPeakColumns = "other"), "not available")
     res <- chromPeakSpectra(xmse, peaks = pks)
     expect_s4_class(res, "Spectra")
     expect_equal(length(res), 0)
@@ -1081,6 +1084,8 @@ test_that("filterFeatureDefinitions works", {
 
 test_that("featureSpectra works", {
     expect_error(featureSpectra(xmse), "No feature definitions")
+    expect_error(featureSpectra(xmseg,
+                                  featureColumns = "other"), "not present")
     res_all <- featureSpectra(xmseg, msLevel = 1L)
     expect_s4_class(res_all, "Spectra")
     expect_true(all(rownames(featureDefinitions(xmseg)) %in%

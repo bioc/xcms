@@ -1782,6 +1782,9 @@ setMethod(
         if (!hasFeatures(object))
             stop("No feature definitions present. Please run ",
                  "'groupChromPeaks' first.")
+        if (!featureColumns %in% colnames(featureDefinitions(object)))
+            stop("One or more of the requested 'featureColumns' are not ",
+                 "present in the feature definitions.")
         if (hasAdjustedRtime(object))
             object <- applyAdjustedRtime(object)
         features_all <- rownames(featureDefinitions(object))

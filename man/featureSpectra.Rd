@@ -105,7 +105,7 @@ spectra per feature).
 
 The information from \code{featureDefinitions} for each feature can be included
 in the returned \code{\link[=Spectra]{Spectra()}} object using the \code{featureColumns} parameter.
-This is useful for retaining details such as the median retention time (\code{rtmed})
+This is useful for keeping details such as the median retention time (\code{rtmed})
 or median m/z (\code{mzmed}). The columns will retain their names as specified
 in the \code{featureDefinitions} object, prefixed by \code{"feature_"}
 (e.g., \code{"feature_mzmed"}). Additionally, the \emph{feature ID} (i.e., the row

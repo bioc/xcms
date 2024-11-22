@@ -136,10 +136,10 @@ of \code{chromPeaks}. Each element of the list contains thus a \code{Spectra} wi
 spectra for one chromatographic peak (or a \code{Spectra} of length 0 if no
 spectrum was found for the respective chromatographic peak).
 
-Parameters \code{chromPeakColumns} allow the user to add specific metadata
+Parameter \code{chromPeakColumns} allows the user to add specific metadata
 columns from the chromatographic peaks (\code{chromPeaks}) to the returned
-spectra object. This can be useful to retain information such as retention
-time (\code{rt}), m/z (\code{mz}). The columns will be named as they is written in the
+spectra object. This can be useful to keep information such as retention
+time (\code{rt}), m/z (\code{mz}). The columns will be named as they are written in the
 \code{chromPeaks} object with the prefix \code{"chrom_peak_"}. The \emph{peak ID}
 (i.e., the row name of the peak in the \code{chromPeaks} matrix) is always added
 to the spectra object as a metadata column named \code{"chrom_peak_id"}.
