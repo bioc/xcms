@@ -1229,8 +1229,7 @@ setMethod(
                                 "largest_tic", "largest_bpi"),
              msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
              skipFilled = FALSE, peaks = character(),
-             addColumnsChromPeaks = c("rt", "mz"),
-             addColumnsChromPeaksPrefix = "chrom_peak_",
+             chromPeakColumns = c("rt", "mz"),
              return.type = c("Spectra", "List"), BPPARAM = bpparam()) {
         if (hasAdjustedRtime(object))
             object <- applyAdjustedRtime(object)
@@ -1246,19 +1245,15 @@ setMethod(
         else pkidx <- integer()
         res <- .mse_spectra_for_peaks(object, method, msLevel, expandRt,
                                       expandMz, ppm, skipFilled, pkidx,
-                                      addColumnsChromPeaks,
-                                      addColumnsChromPeaksPrefix,
+                                      chromPeakColumns,
                                       BPPARAM)
         if (!length(pkidx))
             peaks <- rownames(.chromPeaks(object))
         else peaks <- rownames(.chromPeaks(object))[pkidx]
-        if (return.type == "Spectra") {
-            col <- paste0(addColumnsChromPeaksPrefix, "id")
-            res <- res[as.matrix(findMatches(peaks, res[[col]]))[, 2L]]
-        } else {
-            col <- paste0(addColumnsChromPeaksPrefix, "id")
-            as(split(res, factor(res[[col]], levels = peaks)), "List")
-        }
+        if (return.type == "Spectra")
+            res <- res[as.matrix(findMatches(peaks, res$chrom_peak_id))[, 2L]]
+        else
+            as(split(res, factor(res$chrom_peak_id, levels = peaks)), "List")
     })
 
 #' @rdname reconstructChromPeakSpectra
@@ -1781,9 +1776,7 @@ setMethod(
     function(object, msLevel = 2L, expandRt = 0, expandMz = 0, ppm = 0,
              skipFilled = FALSE, return.type = c("Spectra", "List"),
              features = character(),
-             addColumnsFeatures = c("rtmed", "mzmed"),
-             addColumnsFeaturesPrefix = "feature_",
-             addColumnsChromPeaksPrefix = "chrom_peak_",
+             featureColumns = c("rtmed", "mzmed"),
              ...) {
         return.type <- match.arg(return.type)
         if (!hasFeatures(object))
@@ -1803,17 +1796,16 @@ setMethod(
         sps <- .mse_spectra_for_peaks(
             object, msLevel = msLevel, expandRt = expandRt,
             expandMz = expandMz, ppm = ppm, skipFilled = skipFilled,
-            peaks = unique(pindex),
-            addColumnsChromPeaksPrefix = addColumnsChromPeaksPrefix, ...)
-        col <- paste0(addColumnsChromPeaksPrefix, "id")
+            peaks = unique(pindex), ...)
         mtch <- as.matrix(
-            findMatches(sps[[col]], rownames(.chromPeaks(object))[pindex]))
+            findMatches(sps$chrom_peak_id,
+                        rownames(.chromPeaks(object))[pindex]))
         sps <- sps[mtch[, 1L]]
         fid <- rep(
             ufeatures, lengths(featureDefinitions(object)$peakidx[findex]))
-        f_data <- featureDefinitions(object)[fid[mtch[, 2L]], addColumnsFeatures]
+        f_data <- featureDefinitions(object)[fid[mtch[, 2L]], featureColumns]
         f_data$id <- fid[mtch[, 2L]]
-        colnames(f_data) <- paste0(addColumnsFeaturesPrefix, colnames(f_data))
+        colnames(f_data) <- paste0("feature_", colnames(f_data))
         sps <- .add_spectra_data(sps, f_data)
         if (return.type == "List") {
             sps <- List(split(sps, f = factor(sps$feature_id,

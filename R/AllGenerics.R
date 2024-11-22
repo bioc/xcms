@@ -417,15 +417,13 @@ setGeneric("chromPeakData<-", function(object, value)
 #' spectra for one chromatographic peak (or a `Spectra` of length 0 if no
 #' spectrum was found for the respective chromatographic peak).
 #'
-#' Parameters `addColumnsChromPeaks` allow the user to add specific metadata
+#' Parameters `chromPeakColumns` allow the user to add specific metadata
 #' columns from the chromatographic peaks (`chromPeaks`) to the returned
 #' spectra object. This can be useful to retain information such as retention
 #' time (`rt`), m/z (`mz`). The columns will be named as they is written in the
-#' `chromPeaks` object with a prefix that is defined by the parameter
-#' `addColumnsChromPeaksPrefix`. The *peak ID* (i.e., the row name of the
-#' peak in the `chromPeaks` matrix) is always added to the spectra object as
-#' metadata column `paste0(addColumnsChromPeaksPrefix,id)`, by default it will
-#' be `"chrom_peak_id"`.
+#' `chromPeaks` object with the prefix `"chrom_peak_"`. The *peak ID*
+#' (i.e., the row name of the peak in the `chromPeaks` matrix) is always added
+#' to the spectra object as a metadata column named `"chrom_peak_id"`.
 #'
 #' See also the *LC-MS/MS data analysis* vignette for more details and examples.
 #'
@@ -460,15 +458,10 @@ setGeneric("chromPeakData<-", function(object, value)
 #' @param return.type `character(1)` defining the type of result object that
 #'     should be returned.
 #'
-#' @param addColumnsChromPeaks `character` vector with the names of the columns
+#' @param chromPeakColumns `character` vector with the names of the columns
 #'    from `chromPeaks` that should be added to the returned spectra object.
 #'    The columns will be named as they are written in the `chromPeaks` object
-#'    with a prefix that is defined by the parameter
-#'    `addColumnsChromPeaksPrefix`. Defaults to `c("mz", "rt")`.
-#'
-#' @param addColumnsChromPeaksPrefix `character(1)` defining the prefix that
-#'    should be used for the columns from `chromPeaks` that are added to the
-#'    returned spectra object. Defaults to `"chrom_peak_"`.
+#'    with a prefix `"chrom_peak_"`. Defaults to `c("mz", "rt")`.
 #'
 #' @param BPPARAM parallel processing setup. Defaults to [bpparam()].
 #'
@@ -517,7 +510,7 @@ setGeneric("chromPeakData<-", function(object, value)
 #' ms2_sps <- chromPeakSpectra(dda)
 #' ms2_sps
 #'
-#' ## spectra variable *peak_id* contain the row names of the peaks in the
+#' ## spectra variable *chrom_peak_id* contain the row names of the peaks in the
 #' ## chromPeak matrix and allow thus to map chromatographic peaks to the
 #' ## returned MS2 spectra
 #' ms2_sps$chrom_peak_id
@@ -817,23 +810,20 @@ setGeneric("featureDefinitions<-", function(object, value)
 #' spectra per feature).
 #'
 #' The information from `featureDefinitions` for each feature can be included
-#' in the returned [Spectra()] object using the `addColumnsFeatures` parameter.
+#' in the returned [Spectra()] object using the `featureColumns` parameter.
 #' This is useful for retaining details such as the median retention time (`rtmed`)
 #' or median m/z (`mzmed`). The columns will retain their names as specified
-#' in the `featureDefinitions` object, prefixed by the value of the
-#' `addColumnsFeaturesPrefix` parameter. Additionally, the *feature ID*
-#' (i.e., the row name of the feature in the `featureDefinitions` data.frame)
-#' is always added as a metadata column with the name
-#' `paste0(addColumnsFeaturesPrefix, "id")`, which defaults to `"feature_id"`.
+#' in the `featureDefinitions` object, prefixed by `"feature_"`
+#' (e.g., `"feature_mzmed"`). Additionally, the *feature ID* (i.e., the row
+#' name of the feature in the `featureDefinitions` data.frame) is always added
+#' as a metadata column named `"feature_id"`.
 #'
 #' See also [chromPeakSpectra()], as it supports a similar parameter for
 #' including columns from the chromatographic peaks in the returned spectra object.
 #' These parameters can be used in combination to include information from both
 #' the chromatographic peaks and the features in the returned [Spectra()].
 #' The *peak ID* (i.e., the row name of the peak in the `chromPeaks` matrix)
-#' is added as a metadata column with the name
-#' `paste0(addColumnsChromPeaksPrefix, "id")`, which defaults to
-#' `"chrom_peak_id"`.
+#' is added as a metadata column named `"chrom_peak_id"`.
 #'
 #' @param object [XcmsExperiment] or [XCMSnExp] object with feature defitions.
 #'
@@ -846,15 +836,11 @@ setGeneric("featureDefinitions<-", function(object, value)
 #'     `featureDefinitions(x)`). This parameter overrides `skipFilled` and is
 #'     only supported for `return.type` being either `"Spectra"` or `"List"`.
 #'
-#' @param addColumnsFeatures `character` vector with the names of the columns
+#' @param featureColumns `character` vector with the names of the columns
 #'     from `featureDefinitions` that should be added to the returned spectra
 #'     object. The columns will be named as they are written in the
-#'    `featureDefinitions` object with a prefix that is defined by the parameter
-#'    `addColumnsFeaturesPrefix`. Defaults to `c("mzmed", "rtmed")`.
-#'
-#' @param addColumnsFeaturesPrefix `character(1)` defining the prefix that
-#'     should be used for the columns from `featureDefinitions` that are added
-#'     to the returned spectra object. Defaults to `"feature_"`.
+#'    `featureDefinitions` object with the prefix `"feature_`.
+#'     Defaults to `c("mzmed", "rtmed")`.
 #'
 #' @param ... additional arguments to be passed along to [chromPeakSpectra()],
 #'     such as `method`.
@@ -866,7 +852,7 @@ setGeneric("featureDefinitions<-", function(object, value)
 #' the order and the length matches parameter `features` (or if no `features`
 #' is defined the order of the features in `featureDefinitions(object)`).
 #'
-#' Spectra variables `"peak_id"` and `"feature_id"` define to which
+#' Spectra variables `"chrom_peak_id"` and `"feature_id"` define to which
 #' chromatographic peak or feature each individual spectrum is associated
 #' with.
 #'

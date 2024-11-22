@@ -794,8 +794,7 @@
                                    msLevel = 2L, expandRt = 0, expandMz = 0,
                                    ppm = 0, skipFilled = FALSE,
                                    peaks = integer(),
-                                   addColumnsChromPeaks = c("rt", "mz"),
-                                   addColumnsChromPeaksPrefix = "chrom_peak_",
+                                   chromPeakColumns = c("rt", "mz"),
                                    BPPARAM = bpparam()) {
     method <- match.arg(method)
     pks <- .chromPeaks(x)[, c("mz", "mzmin", "mzmax", "rt",
@@ -821,8 +820,7 @@
     res <- bpmapply(
         split.data.frame(pks, f),
         split(spectra(x), factor(fromFile(x), levels = levels(f))),
-        FUN = function(pk, sp, msLevel, method, addColumnsChromPeaks,
-                       addColumnsChromPeaksPrefix) {
+        FUN = function(pk, sp, msLevel, method, chromPeakColumns) {
             sp <- filterMsLevel(sp, msLevel)
             idx <- switch(
                 method,
@@ -833,17 +831,14 @@
                 largest_bpi = .spectra_index_list_largest_bpi(sp, pk, msLevel))
             ids <- rep(rownames(pk), lengths(idx))
             res <- sp[unlist(idx)]
-            pk_data <- as.data.frame(pk[ids, addColumnsChromPeaks,
-                                        drop = FALSE])
+            pk_data <- as.data.frame(pk[ids, chromPeakColumns, drop = FALSE])
             pk_data$id <- ids
-            colnames(pk_data) <- paste0(addColumnsChromPeaksPrefix,
-                                          colnames(pk_data))
+            colnames(pk_data) <- paste0("chrom_peak_", colnames(pk_data))
             res <- .add_spectra_data(res, pk_data)
             res
         },
         MoreArgs = list(msLevel = msLevel, method = method,
-                        addColumnsChromPeaks = addColumnsChromPeaks,
-                        addColumnsChromPeaksPrefix = addColumnsChromPeaksPrefix),
+                        chromPeakColumns = chromPeakColumns),
         BPPARAM = BPPARAM)
     Spectra:::.concatenate_spectra(res)
 }

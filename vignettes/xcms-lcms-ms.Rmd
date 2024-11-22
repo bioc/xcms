@@ -206,7 +206,7 @@ dda_spectra$chrom_peak_id
 ```
 
 Some information about the chromatographic peak can also be added to the 
-returned `Spectra` object using the `addChromPeaksColumns` parameter in 
+returned `Spectra` object using the `chrompeakColumns` parameter in 
 `chromPeakSpectra()`. By default, the m/z and retention time of the 
 chromatographic peak are added to the spectra metadata.
 
