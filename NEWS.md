@@ -1,4 +1,13 @@
-# xcms 4.5.1
+# xcms 4.5.2
+
+## Changes in version 4.5.2
+
+- Small update to `featureSpectra()` and `chromPeakSpectra()` to allow addition
+  of `chromPeaks()` and `featuresDefinitions()` columns to be added to the
+  `Spectra` output. 
+- Tidied the `xcms` vignette, to order the filtering of features and remove 
+  the outdated normalisation paragraph.In depth discussion on this subject can 
+  be found on `metabonaut`. 
 
 ## Changes in version 4.5.1
 
@@ -12,8 +21,6 @@
   of the chromPeaks matched with Lamas. 
 - Small fix to the .yml file for the github actions, so they do not crash on 
   warnings.
-
-
 
 ## Changes in version 4.3.3
 
